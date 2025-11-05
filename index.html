@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DBMS Study Guide: Ch 1-5 (Detailed)</title>
+    <!-- Load Tailwind CSS via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Custom Styles & Animations -->
+    <style>
+        /* Set Inter font */
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+    
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #111827; /* bg-gray-900 */
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #22d3ee; /* cyan-400 */
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #0e7490; /* cyan-600 */
+        }
+
+        /* Animation class setup */
+        .animate-on-scroll {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        .animate-on-scroll.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Active nav link style */
+        .nav-link.active {
+            background-color: #22d3ee; /* cyan-400 */
+            color: #111827; /* gray-900 */
+        }
+
+        /* --- Custom CSS for Hero Database Animation --- */
+        .db-icon {
+            width: 100px;
+            height: 120px;
+            position: relative;
+        }
+        .db-disk {
+            position: absolute;
+            left: 0;
+            width: 100%;
+            height: 30px;
+            background: #374151; /* gray-700 */
+            border: 3px solid #67e8f9; /* cyan-300 */
+            border-radius: 50% / 15px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            animation: pulse 2.5s infinite ease-in-out;
+        }
+        .db-disk:nth-child(1) { top: 0; }
+        .db-disk:nth-child(2) { top: 25px; animation-delay: 0.2s; }
+        .db-disk:nth-child(3) { top: 50px; animation-delay: 0.4s; }
+        
+        @keyframes pulse {
+            0%, 100% { border-color: #67e8f9; }
+            50% { border-color: #a78bfa; } /* purple-400 */
+        }
+        
+        /* Custom styles for diagram placeholders */
+        .diagram-placeholder {
+            background: #1f2937; /* gray-800 */
+            border: 2px dashed #4b5563; /* gray-600 */
+            border-radius: 0.75rem;
+            padding: 2rem;
+            text-align: center;
+            color: #9ca3af; /* gray-400 */
+            font-style: italic;
+        }
+        
+        /* Style for sub-section headings */
+        .sub-section {
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            font-size: 1.5rem; /* text-xl */
+            font-weight: 600; /* font-semibold */
+            color: #e5e7eb; /* gray-200 */
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #374151; /* gray-700 */
+        }
+        
+        /* Style for definition terms */
+        .def-term {
+            font-weight: 600;
+            color: #a78bfa; /* purple-400 */
+        }
+        
+        /* Style for important tidbits */
+        .tidbit {
+             background: #312e81; /* indigo-900 */
+             border-left: 4px solid #818cf8; /* indigo-400 */
+             color: #c7d2fe; /* indigo-200 */
+             padding: 1.5rem;
+             border-radius: 0.5rem;
+             margin: 2rem 0;
+        }
+        
+        /* Style for definition lists */
+        .def-list {
+            list-style: none;
+            padding-left: 0;
+        }
+        .def-list li {
+            background-color: #1f2937; /* gray-800 */
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin-bottom: 0.75rem;
+            border-left: 4px solid #22d3ee; /* cyan-400 */
+        }
+        .def-list strong {
+            color: #67e8f9; /* cyan-300 */
+            display: block;
+            margin-bottom: 0.25rem;
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-gray-300 font-sans">
+
+    <!-- Fixed Header/Navigation -->
+    <nav class="fixed top-0 left-0 right-0 z-50 bg-gray-900/80 backdrop-blur-md shadow-lg border-b border-gray-700">
+        <div class="container mx-auto px-6 py-3 flex justify-center items-center">
+            <div class="flex space-x-2 md:space-x-4">
+                <a href="#ch1" class="nav-link text-gray-300 hover:bg-cyan-500 hover:text-gray-900 transition-all px-3 py-2 rounded-md text-sm font-medium">Ch 1: Intro</a>
+                <a href="#ch2" class="nav-link text-gray-300 hover:bg-cyan-500 hover:text-gray-900 transition-all px-3 py-2 rounded-md text-sm font-medium">Ch 2: Environment</a>
+                <a href="#ch3" class="nav-link text-gray-300 hover:bg-cyan-500 hover:text-gray-900 transition-all px-3 py-2 rounded-md text-sm font-medium">Ch 3: E-R Model</a>
+                <a href="#ch4" class="nav-link text-gray-300 hover:bg-cyan-500 hover:text-gray-900 transition-all px-3 py-2 rounded-md text-sm font-medium">Ch 4: Semantic Model</a>
+                <a href="#ch5" class="nav-link text-gray-300 hover:bg-cyan-500 hover:text-gray-900 transition-all px-3 py-2 rounded-md text-sm font-medium">Ch 5: Relational Model</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content Area -->
+    <main class="container mx-auto px-6 pt-24">
+
+        <!-- Hero Section -->
+        <section class="text-center py-16 md:py-24 animate-on-scroll">
+            <div class="flex justify-center mb-8">
+                <div class="db-icon">
+                    <div class="db-disk"></div>
+                    <div class="db-disk"></div>
+                    <div class="db-disk"></div>
+                </div>
+            </div>
+            <h1 class="text-4xl md:text-6xl font-extrabold text-white mb-4">A Fundamental Study of</h1>
+            <h2 class="text-3xl md:text-5xl font-bold text-cyan-400 mb-8">Database Management Systems</h2>
+            <p class="text-xl text-gray-400 max-w-3xl mx-auto">
+                A detailed, topic-by-topic guide to Chapters 1-5.
+            </p>
+        </section>
+
+        <!-- Chapter 1: Introduction to Databases -->
+        <section id="ch1" class="chapter-section pt-20">
+            <h2 class="text-3xl font-bold text-white mb-8 pb-4 border-b-4 border-cyan-500 animate-on-scroll">Chapter 1: Introduction to Databases</h2>
+            
+            <h3 class="sub-section animate-on-scroll">1.1 Data</h3>
+            <div class="bg-gray-800 p-6 rounded-xl shadow-lg animate-on-scroll">
+                <p>A collection of raw, unprocessed facts and figures. Data is collected from different sources for different purposes and is not yet processed to get its exact meaning.</p>
+                <h4 class="text-lg font-semibold text-white mt-4 mb-2">Types of Data:</h4>
+                <ul class="list-disc list-inside space-y-2 pl-2">
+                    <li><span class="def-term">Numeric:</span> Digits 0-9 (e.g., 10, 245).</li>
+                    <li><span class="def-term">Alphabetic:</span> Letters A-Z and blank spaces (e.g., "IT Series").</li>
+                    <li><span class="def-term">Alphanumeric:</span> Digits, letters, and special characters (e.g., "H#17").</li>
+                    <li><span class="def-term">Image:</span> Charts, graphs, and pictures.</li>
+                    <li><span class="def-term">Audio:</span> Music, speech, and any sound.</li>
+                    <li><span class="def-term">Video:</span> Full-motion images.</li>
+                </ul>
+            </div>
+
+            <h3 class="sub-section animate-on-scroll">1.2 Information</h3>
+            <div class="bg-gray-800 p-6 rounded-xl shadow-lg animate-on-scroll">
+                <p>Processed data. It is an organized and processed form of data, making it meaningful and useful for decision-making. Data is the input, and information is the output.</p>
+            </div>
+            
+            <h3 class="sub-section animate-on-scroll">1.3 Difference between Data and Information</h3>
+            <div class="overflow-x-auto animate-on-scroll">
+                <table class="w-full min-w-lg bg-gray-800 rounded-xl shadow-lg">
+                    <thead>
+                        <tr class="bg-gray-700">
+                            <th class="p-4 text-left text-lg font-semibold text-white">Data</th>
+                            <th class="p-4 text-left text-lg font-semibold text-white">Information</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="border-b border-gray-700">
+                            <td class="p-4">Consists of unprocessed raw facts.</td>
+                            <td class="p-4">Is the processed form of data.</td>
+                        </tr>
+                        <tr class="border-b border-gray-700">
+                            <td class="p-4">Used as input to the computer.</td>
+                            <td class="p-4">Is the output of the computer.</td>
+                        </tr>
+                        <tr class="border-b border-gray-700">
+                            <td class="p-4">Is not meaningful.</td>
+                            <td class="p-4">Is meaningful.</td>
+                        </tr>
+                        <tr>
+                            <td class="p-4">Not used in decision-making.</td>
+                            <td class="p-4">Very important for decision-making.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <h3 class="sub-section animate-on-scroll">1.4 Metadata</h3>
+            <div class="bg-gray-800 p-6 rounded-xl shadow-lg animate-on-scroll">
+                <p>Data about data. It describes the properties and characteristics of other data, such as its size, format, rules, and constraints (e.g., data type, length, "must contain @").</p>
+            </div>
+            
+            <h3 class="sub-section animate-on-scroll">1.5 File Processing System</h3>
+            <div class="bg-gray-800 p-6 rounded-xl shadow-lg animate-on-scroll">
+                <p>The traditional computer-based method where each department in an organization has its own set of files, designed specifically for their own applications. This system has many disadvantages.</p>
+                <h4 class="text-lg font-semibold text-white mt-4 mb-2">Disadvantages:</h4>
+                <ul class="def-list">
+                    <li><strong>Data Redundancy and Inconsistency:</strong> The same data is duplicated in multiple files, which can lead to conflicts (e.g., an address is updated in one file but not another).</li>
+                    <li><strong>Data Isolation:</strong> Data is stored in various files, making it very difficult to write new applications to retrieve data from multiple files.</li>
+                    <li><strong>Integrity Problems:</strong> It's hard to enforce consistency constraints (e.g., "Marks must be a number").</li>
+                    <li><strong>Program-Data Dependence:</strong> Programs are tied to the file format. If you change the file's structure (e.g., add a field), you must change all programs that use that file.</li>
+                    <li><strong>Atomicity Problem:</strong> A transaction (e.g., a money transfer) must happen entirely or not at all. File systems can fail mid-step, leaving data inconsistent.</li>
+                    <li><strong>Security Problems:</strong> It's difficult to provide different levels of access (e.g., read-only vs. write) for different users.</li>
+                    <li><strong>Program Maintenance:</strong> Most of the budget is spent on maintaining old programs rather than building new ones.</li>
+                </ul>
+            </div>
+            
+            <h3 class="sub-section animate-on-scroll">1.6 Database</h3>
+            <div class="bg-gray-800 p-6 rounded-xl shadow-lg animate-on-scroll">
+                <p>An organized collection of related data stored in an efficient and compact manner. Data is typically arranged in <span class="def-term">Tables</span> (relations), which consist of <span class="def-term">Rows</span> (records or tuples) and <span class="def-term">Columns</span> (fields or attributes).</p>
+                <p class="mt-2">Examples: A phone directory, a library card catalog, or an accounting system.</p>
+            </div>
+            
+            <h3 class="sub-section animate-on-scroll">1.7 Database Management System (DBMS)</h3>
+            <div class="bg-gray-800 p-6 rounded-xl shadow-lg animate-on-scroll">
+                <p>A collection of programs (software) used to create and maintain a database. The DBMS is the general-purpose tool that provides the facilities to define, store, and manipulate the data.</p>
+            </div>
+
+            <h3 class="sub-section animate-on-scroll">1.8 Components of Database Environment</h3>
+            <ul class="def-list animate-on-scroll">
+                <li><strong>Repository:</strong> A collection of all data definitions, relationships, and formats (i.e., the metadata).</li>
+                <li><strong>DBMS:</strong> The software that manages the database.</li>
+                <li><strong>Database:</strong> The organized collection of data.</li>
+                <li><strong>Application Program:</strong> A program used to send commands to the DBMS (e.g., Developer2000, Power Builder).</li>
+                <li><strong>User Interface:</strong> The visual environment (forms, menus, reports) that users interact with.</li>
+                <li><strong>Data Administrators (DA):</strong> Persons responsible for the whole information system.</li>
+                <li><strong>System Analysts & Programmers:</strong> Those who design and implement the applications.</li>
+                <li><strong>End Users:</strong> The people who interact with the application to insert, delete, and update data.</li>
+            </ul>
+            
+            <h3 class="sub-section animate-on-scroll">1.9 Database Approach</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="bg-gray-800 p-6 rounded-xl shadow-lg animate-on-scroll">
+                    <h4 class="text-xl font-semibold text-green-400 mb-3">Advantages</h4>
+                    <ul class="list-disc list-inside space-y-2">
+                        <li>Redundancy Control</li>
+                        <li>Data Consistency</li>
+                        <li>Consistency Constraints</li>
+                        <li>Data Atomicity</li>
+                        <li>Data Security</li>
+                        <li>Reduced Development Time</li>
+                        <li>Compactness</li>
+                        <li>Easier Reporting</li>
+                        <li>Data Sharing</li>
+                        <li>Increased Concurrency</li>
+                        <li>Improved Backup and Recovery</li>
+                        <li>Data Independence</li>
+                    </ul>
+                </div>
+                <div class="bg-gray-800 p-6 rounded-xl shadow-lg animate-on-scroll">
+                    <h4 class="text-xl font-semibold text-red-400 mb-3">Disadvantages</h4>
+                    <ul class="list-disc list-inside space-y-2">
+                        <li>High Cost of DBMS</li>
+                        <li>Higher Hardware Cost</li>
+                        <li>Higher Programming Cost</li>
+                        <li>High Conversion Cost</li>
+                        <li>More Chance of Failure (centralized)</li>
+                        <li>Complexity & Performance (can be slower)</li>
+                    </ul>
+                </div>
+            </div>
+
+            <h3 class="sub-section animate-on-scroll">1.10 Difference between File and Database Approach</h3>
+            <div class="tidbit animate-on-scroll">
+                <p>The key difference is <strong>Data Independence</strong>. In a file-based approach, programs and data are inter-dependent. In a database approach, they are independent. This means the database structure can be changed without needing to rewrite all the application programs.</p>
+            </div>
+            
+            <h3 class="sub-section animate-on-scroll">1.11 Application Program</h3>
+            <div class="bg-gray-800 p-6 rounded-xl shadow-lg animate-on-scroll">
+                <p>A program that sends commands to the DBMS to manipulate data. The user interacts with the application program (the "front-end"), and the application program interacts with the DBMS (which manages the "back-end" database).</p>
+            </div>
+
+            <h3 class="sub-section animate-on-scroll">1.12 Range of Database Applications</h3>
+            <ul class="def-list animate-on-scroll">
+                <li><strong>Personal Computer Databases:</strong> For a single user (e.g., on a laptop).</li>
+                <li><strong>Workgroup Databases:</strong> For a small team (less than 25) connected via a Local Area Network (LAN).</li>
+                <li><strong>Department Databases:</strong> For a functional unit (25-100 people), like marketing or accounting.</li>
+                <li><strong>Enterprise Databases:</strong> Supports the entire organization, often by integrating data from other databases (e.g., a Data Warehouse).</li>
+            </ul>
+
+            <h3 class="sub-section animate-on-scroll">1.13 Types of Users</h3>
+            <ul class="def-list animate-on-scroll">
+                <li><strong>Application Programmers:</strong> Professionals who write the programs that interact with the database.</li>
+                <li><strong>End Users:</strong> People who use the applications directly.
+                    <ul class="list-disc list-inside space-y-1 mt-2 pl-4">
+                        <li><strong>Naive Users:</strong> Have no technical knowledge and use the system via simple menus and buttons.</li>
+                        <li><strong>Sophisticated Users:</strong> Are familiar with the database structure and can use a query language (like SQL) directly.</li>
+                    </ul>
+                </li>
+                <li><strong>Database Administrator (DBA):</strong> The most technical user, responsible for managing the entire database system (design, security, backups, performance).</li>
+            </ul>
+
+            <h3 class="sub-section animate-on-scroll">1.14 History of Database Systems</h3>
+            <div class="bg-gray-800 p-6 rounded-xl shadow-lg animate-on-scroll">
+                <ul class="list-disc list-inside space-y-2">
+                    <li><strong>1960s:</strong> Computers became cost-effective. Two main models developed: <span class="def-term">Network model (CODASYL)</span> and <span class="def-term">Hierarchical (IMS)</span>.</li>
+                    <li><strong>1970-72:</strong> E.F. Codd proposed the <span class="def-term">Relational Model</span>, a landmark paper that became the standard.</li>
+                    <li><strong>1976:</strong> P. Chen proposed the <span class="def-term">Entity-Relationship (E-R) model</span> for database design.</li>
+                    <li><strong>Mid-1980s:</strong> <span class="def-term">SQL (Structured Query Language)</span> became the standard.</li>
+                    <li><strong>Early 1990s:</strong> Rise of client-server tools (PowerBuilder, Oracle Developer).</li>
+                    <li><strong>Late 1990s:</strong> The Internet boom led to Web/DB connectors (JDBC, ASP, etc.).</li>
+                    <li><strong>Present:</strong> Focus on huge (terabyte) systems, data mining, data warehousing, mobile databases, and XML.</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Chapter 2: Database Environment -->
+        <section id="ch2" class="chapter-section pt-20">
+            <h2 class="text-3xl font-bold text-white mb-8 pb-4 border-b-4 border-cyan-500 animate-on-scroll">Chapter 2: The Database Environment</h2>
+            
+            <h3 class="sub-section animate-on-scroll">2.1 Three-Level Architecture</h3>
+            <div class="bg-gray-800 p-6 rounded-xl shadow-lg animate-on-scroll">
+                <p>The fundamental architecture for modern database systems, it separates the database into three levels or views to provide data independence.</p>
+                <div class="diagram-placeholder my-4">
+                    
+                </div>
+                <ul class="def-list mt-4">
+                    <li><strong>1. External Level / View:</strong> What a particular user or application sees. It's a "subschema" showing only the part of the database relevant to that user. There can be many external views.</li>
+                    <li><strong>2. Logical or Conceptual Level / View:</strong> The "community view." A complete logical description of the *entire* database (all entities, attributes, relationships). It hides physical storage details. There is only one conceptual schema.</li>
+                    <li><strong>3. Internal or Physical Level:</strong> Describes *how* the data is physically stored on the storage media (data structures, file organization, indexes). There is only one internal schema.</li>
+                </ul>
+            </div>
+
+            <h3 class="sub-section animate-on-scroll">2.2 Mapping</h3>
+            <div class="bg-gray-800 p-6 rounded-xl shadow-lg animate-on-scroll">
+                <p>The process of converting or relating data between the three levels.</p>
+                <ul class="list-disc list-inside space-y-2 mt-2">
+                    <li><strong>External/Conceptual Mapping:</strong> Defines the correspondence between a specific external view and the conceptual view.</li>
+                    <li><strong>Conceptual/Internal Mapping:</strong> Defines the correspondence between the conceptual view and the stored database.</li>
+                </ul>
+            </div>
+            
+            <h3 class="sub-section animate-on-scroll">2.3 Data Independence</h3>
+            <div class="tidbit animate-on-scroll">
+                <p>The main advantage of the 3-Level Architecture. It means you can change the schema at one level without having to change the schema at the next level up.</p>
+                <ul class="list-disc list-inside space-y-2 mt-3">
+                    <li><strong>Physical Data Independence:</strong> The ability to change the <span class="def-term">Internal</span> level (e.g., add an index, change file organization) without affecting the <span class="def-term">Conceptual</span> level. This is relatively easy to achieve.</li>
+                    <li><strong>Logical Data Independence:</strong> The ability to change the <span class="def-term">Conceptual</span> level (e.g., add a new entity or attribute) without affecting existing <span class="def-term">External</span> views. This is much harder to achieve.</li>
+                </ul>
+            </div>
+            
+            <h3 class="sub-section animate-on-scroll">2.4 Data Models</h3>
+            <div class="bg-gray-800 p-6 rounded-xl shadow-lg animate-on-scroll">
+                <p>A collection of concepts used to describe and manipulate data, relationships, and constraints. A data model has three parts:</p>
+                <ul class="list-disc list-inside space-y-1 mt-2">
+                    <li><strong>Structural Part:</strong> Rules for how a database can be developed.</li>
+                    <li><strong>Manipulative Part:</strong> Defines the operations (e.g., update, retrieve) that can be performed.</li>
+                    <li><strong>Set of Integrity Rules:</strong> Ensures the accuracy of data.</li>
+                </ul>
+            </div>
+
+            <h3 class="sub-section animate-on-scroll">2.5 Types of Data Models</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="bg-gray-800 p-6 rounded-xl shadow-lg animate-on-scroll">
+                    <h4 class="text-xl font-semibold text-white mb-3">Record-Based Data Models</h4>
+                    <p>Models based on records (tables).</p>
+                    <ul class="def-list mt-3">
+                        <li><strong>Hierarchical Model:</strong> Organizes data in a parent-child tree structure. A child can only have <span class="def-term">one</span> parent. Very fast but inflexible.
+                        <div class="diagram-placeholder my-2 text-sm">
+                            
+
+[Image of Hierarchical Model diagram]
+
+                        </div>
+                        </li>
+                        <li><strong>Network Model:</strong> An extension of the hierarchical model. A child (member) can have <span class="def-term">multiple</span> parents (owners). More flexible but very complex.
+                        <div class="diagram-placeholder my-2 text-sm">
+                            
+                        </div>
+                        </li>
+                        <li><strong>Relational Model:</strong> Represents data in 2D tables (relations). This is the standard for almost all modern DBMSs.
+                        <div class="diagram-placeholder my-2 text-sm">
+                            
+                        </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="bg-gray-800 p-6 rounded-xl shadow-lg animate-on-scroll">
+                    <h4 class="text-xl font-semibold text-white mb-3">Other Models</h4>
+                    <ul class="def-list mt-3">
+                        <li><strong>Object-Based Data Models:</strong> Use concepts like entities, attributes, and relationships (e.g., the E-R Model) or objects (e.g., Object-Oriented Model).</li>
+                        <li><strong>Physical Data Models:</strong> Describe data at the internal level (how data is stored).</li>
+                    </ul>
+                </div>
+            </div>
+
+            <h3 class="sub-section animate-on-scroll">2.6 Functions of DBMS</h3>
+            <ul class="def-list animate-on-scroll">
+                <li><strong>Data Processing:</strong> Creating, storing, and arranging data.</li>
+                <li><strong>User-accessible Catalog:</strong> Maintains a data dictionary of metadata.</li>
+                <li><strong>Transaction Support:</strong> Ensures transactions are atomic (all or nothing).</li>
+                <li><strong>Concurrency Support:</strong> Allows multiple users to access data simultaneously without conflicts.</li>
+                <li><strong>Recovery Services:</strong> Can recover the database to a consistent state after a failure.</li>
+                <li><strong>Data Communication Support:</strong> Integrates with network software.</li>
+                <li><strong>Integrity Services:</strong> Enforces data constraints to maintain accuracy.</li>
+                <li><strong>Authorization Services:</strong> Controls who can access what data.</li>
+            </ul>
+
+            <h3 class="sub-section animate-on-scroll">2.7 & 2.8 Database Development Process (SDLC)</h3>
+            <div class="bg-gray-800 p-6 rounded-xl shadow-lg animate-on-scroll">
+                <p>The System Development Life Cycle (SDLC) is the conventional way to develop an information system.</p>
+                <div class="diagram-placeholder my-4">
+                    
+
+[Image of SDLC waterfall diagram: Preliminary Investigation -> Analysis -> Design -> Development -> Testing -> Implementation -> Maintenance]
+
+                </div>
+                <ul class="list-decimal list-inside space-y-2 mt-3">
+                    <li><strong>Preliminary Investigation:</strong> Identify problems and assess feasibility.</li>
+                    <li><strong>Requirement Analysis:</strong> Study the current system and user needs in detail.</li>
+                    <li><strong>System Design:</strong> Define *how* the new system will meet the requirements (forms, reports, database design).</li>
+                    <li><strong>Software Development:</strong> The actual coding of the programs.</li>
+                    <li><strong>System Testing:</strong> Integrating and testing all modules.</li>
+                    <li><strong>System Implementation:</strong> Installing the system and training users.</li>
+                    <li><strong>System Maintenance:</strong> Modifying and enhancing the system after it's in use.</li>
+                </ul>
+            </div>
+            
+            <h3 class="sub-section animate-on-scroll">2.10 Design Tools: Data Flow Diagram (DFD)</h3>
+            <div class="bg-gray-800 p-6 rounded-xl shadow-lg animate-on-scroll">
+                <p>A DFD is a graphical tool that shows the flow of data through an organization. It hides complexities and focuses on processes.</p>
+                <div class="diagram-placeholder my-4">
+                    
+                </div>
+                <ul class="def-list mt-3">
+                    <li><strong>Data Flow (Arrow):</strong> A pipeline for data.</li>
+                    <li><strong>Data Store (Open-ended Rectangle):</strong> A repository for data (e.g., a database table).</li>
+                    <li><strong>Process (Oval or Rounded Rectangle):</strong> An action that transforms data.</li>
+                    <li><strong>External Entity (Rectangle):</strong> A source or destination of data outside the system.</li>
+                </ul>
+            </div>
+            
+            <h3 class="sub-section animate-on-scroll">2.11 & 2.12 DBA vs. DA</h3>
+            <div class="tidbit animate-on-scroll">
+                <p><strong>Data Administrator (DA):</strong> A <span class="def-term">managerial</span> role. Responsible for the overall information resource, policies, and planning. (Non-technical)</p>
+                <p><strong>Database Administrator (DBA):</strong> A <span class="def-term">technical</span> role. Responsible for the physical DBMS, performance, security, and recovery. (Technical)</p>
+            </div>
+            
+            <h3 class="sub-section animate-on-scroll">2.13 Data Dictionary</h3>
+            <div class="bg-gray-800 p-6 rounded-xl shadow-lg animate-on-scroll">
+                <p>A repository of metadata that describes the logical structure of the database. It is used to manage data, communicate with users, and record changes.
+                <ul class="list-disc list-inside space-y-1 mt-2">
+                    <li><strong>Active Data Dictionary:</strong> Checked by the DBMS *every time* the database is accessed. Always consistent.</li>
+                    <li><strong>Passive Data Dictionary:</strong> Not used in day-to-day processing.</li>
+                </ul>
+            </div>
+            
+            <h3 class="sub-section animate-on-scroll">2.14 & 2.15 Logical vs. Physical Database Design</h3>
+            <ul class="def-list animate-on-scroll">
+                <li><strong>Logical Design:</strong> Creating the conceptual model (e.g., an E-R diagram). This involves representing entities, relationships, merging relations, and normalizing them.</li>
+                <li><strong>Physical Design:</strong> Implementing the logical design on a specific DBMS. This involves:
+                    <ul class="list-disc list-inside space-y-1 mt-2 pl-4">
+                        <li><strong>Data Volume Analysis:</strong> Estimating the size of the database.</li>
+                        <li><strong>Data Distribution Strategy:</strong> Deciding where to store data (Centralized, Partitioned, Replicated).</li>
+                        <li><strong>File Organization:</strong> How records are arranged on disk (Sequential, Direct/Random, Indexed Sequential).</li>
+                        <li><strong>Indexes:</strong> Creating tables to speed up sorting and searching.</li>
+                    </ul>
+                </li>
+            </ul>
+        </section>
+
+        <!-- Chapter 3: E-R Model -->
+        <section id="ch3" class="chapter-section pt-20">
+            <h2 class="text-3xl font-bold text-white mb-8 pb-4 border-b-4 border-cyan-500 animate-on-scroll">Chapter 3: The Entity-Relationship (E-R) Model</h2>
+            
+            <h3 class="sub-section animate-on-scroll">3.1 & 3.2 Elements of the E-R Model</h3>
+            <div class="bg-gray-800 p-6 rounded-xl shadow-lg animate-on-scroll">
+                <p>The E-R model (by Peter Chen, 1976) is a visual tool for conceptual design. It's simple, provides a clear visual representation, and is an effective communication tool.</p>
+                <div class="diagram-placeholder my-4">
+                    
+                </div>
+                <ul class="def-list mt-3">
+                    <li><strong>Entity:</strong> A person, place, thing, or event about which data is collected (e.g., STUDENT, BOOK).
+                        <ul class="list-disc list-inside space-y-1 mt-2 pl-4">
+                            <li><strong>Entity Type:</strong> The set of all entities with the same attributes (e.g., the STUDENT class).</li>
+                            <li><strong>Entity Instance:</strong> A single member of the set (e.g., the student 'Abdullah').</li>
+                        </ul>
+                    </li>
+                    <li><strong>Attribute:</strong> A characteristic or property of an entity (e.g., Name, Address).</li>
+                    <li><strong>Relationship:</strong> A logical connection or association between entities (e.g., a STUDENT "Studies" a COURSE).</li>
+                </ul>
+            </div>
+            
+            <h3 class="sub-section animate-on-scroll">3.3.1 Types of Attributes</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 animate-on-scroll">
+                <div class="bg-gray-800 p-4 rounded-lg"><strong>Simple:</strong> Cannot be subdivided (e.g., Gender).</div>
+                <div class="bg-gray-800 p-4 rounded-lg"><strong>Composite:</strong> Can be subdivided (e.g., Address -> Street, City).</div>
+                <div class="bg-gray-800 p-4 rounded-lg"><strong>Single-Valued:</strong> Has only one value (e.g., Age).</div>
+                <div class="bg-gray-800 p-4 rounded-lg"><strong>Multi-Valued:</strong> Can have many values (e.g., Skills).</div>
+                <div class="bg-gray-800 p-4 rounded-lg"><strong>Stored:</strong> Physically stored in the database (e.g., DateOfBirth).</div>
+                <div class="bg-gray-800 p-4 rounded-lg"><strong>Derived:</strong> Calculated from a stored attribute (e.g., Age is derived from DateOfBirth).</div>
+                <div class="bg-gray-800 p-4 rounded-lg"><strong>Identifier (Key):</strong> An attribute that uniquely identifies one instance (e.g., StudentID). Can be simple (one attribute) or composite (multiple attributes).</div>
+            </div>
+            
+            <h3 class="sub-section animate-on-scroll">3.3.2 Types of Entities</h3>
+            <ul class="def-list animate-on-scroll">
+                <li><strong>Strong Entity:</strong> Can exist on its own and has its own unique identifier (e.g., EMPLOYEE). Represented by a single-line rectangle.</li>
+                <li><strong>Weak Entity:</strong> Cannot exist without its "owner" strong entity. Its identifier is borrowed from the owner (e.g., DEPENDENT). Represented by a double-line rectangle.</li>
+                <li><strong>Associative Entity:</strong> An entity that associates the instances of one or more entity types. Often used to "resolve" a many-to-many relationship and store attributes about that relationship.</li>
+            </ul>
+
+            <h3 class="sub-section animate-on-scroll">3.4 Degree of Relationships</h3>
+            <ul class="def-list animate-on-scroll">
+                <li><strong>Unary (Recursive):</strong> A relationship between instances of the <span class="def-term">same</span> entity type (e.g., a PERSON "Lives With" another PERSON).
+                <div class="diagram-placeholder my-2 text-sm">
+                    
+                </div>
+                </li>
+                <li><strong>Binary:</strong> A relationship between <span class="def-term">two</span> entity types. This is the most common.
+                    <ul class="list-disc list-inside space-y-1 mt-2 pl-4">
+                        <li><strong>One-to-One (1:1):</strong> A CHAIRMAN "Runs" one DEPARTMENT.</li>
+                        <li><strong>One-to-Many (1:N):</strong> A COLLEGE "Has" many DEPARTMENTS.</li>
+                        <li><strong>Many-to-Many (M:N):</strong> A STUDENT "Studies" many COURSES.</li>
+                    </ul>
+                </li>
+                <li><strong>Ternary:</strong> A relationship between <span class="def-term">three</span> entity types (e.g., a CONSULTANT, CLIENT, and CONTRACT are all linked by a "Signs" relationship).
+                <div class="diagram-placeholder my-2 text-sm">
+                    
+                </div>
+                </li>
+            </ul>
+
+            <h3 class="sub-section animate-on-scroll">3.4.4 Cardinality Constraints</h3>
+            <div class="bg-gray-800 p-6 rounded-xl shadow-lg animate-on-scroll">
+                <p>Specifies the number of instances of one entity that can be associated with an instance of another entity. It defines the "business rules."</p>
+                <div class="diagram-placeholder my-4">
+                    
+                </div>
+                <ul class="list-disc list-inside space-y-2 mt-3">
+                    <li><strong>Maximum Cardinality:</strong> The maximum number (1 or Many).</li>
+                    <li><strong>Minimum Cardinality:</strong> The minimum number (0 or 1).
+                        <ul class="list-disc list-inside space-y-1 mt-2 pl-4">
+                            <li>If minimum is 0, participation is <span class="def-term">Optional</span>.</li>
+                            <li>If minimum is 1, participation is <span class="def-term">Mandatory</span>.</li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            
+            <h3 class="sub-section animate-on-scroll">3.5 Subtype & Supertype Entities</h3>
+            <div class="bg-gray-800 p-6 rounded-xl shadow-lg animate-on-scroll">
+                <p>A way to model <span class="def-term">IS-A relationships</span> (e.g., "A STUDENT IS-A PERSON").</p>
+                <div class="diagram-placeholder my-4">
+                    
+                </div>
+                <ul class="list-disc list-inside space-y-2 mt-3">
+                    <li><strong>Supertype:</strong> The general entity (e.g., PERSON) that contains common attributes (Name, Address).</li>
+                    <li><strong>Subtype:</strong> The specific entity (e.g., STUDENT) that contains specific attributes (RollNo) and inherits all attributes from the supertype.</li>
+                    <li><strong>Generalization:</strong> The process of identifying a more general entity type (bottom-up).</li>
+                    <li><strong>Specialization:</strong> The process of identifying more specific entity types (top-down).</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Chapter 4: Semantic Object Model -->
+        <section id="ch4" class="chapter-section pt-20">
+            <h2 class="text-3xl font-bold text-white mb-8 pb-4 border-b-4 border-cyan-500 animate-on-scroll">Chapter 4: The Semantic Object Model</h2>
+            
+            <h3 class="sub-section animate-on-scroll">4.1 & 4.2 Semantic Object Model</h3>
+            <div class="bg-gray-800 p-6 rounded-xl shadow-lg animate-on-scroll">
+                <p>An alternative to the E-R model that views the system as a collection of objects. It's considered more closely aligned with a user's perception of the world.</p>
+                <div class="diagram-placeholder my-4">
+                    
+                </div>
+                <p class="mt-2">A <span class="def-term">Semantic Object</span> is a "thing" in the user's environment, grouped into classes (e.g., STUDENT class). It has attributes:</p>
+                <ul class="list-disc list-inside space-y-1 mt-2 pl-2">
+                    <li><strong>Simple Attributes:</strong> Contain a single value.</li>
+                    <li><strong>Group Attributes:</strong> Composites of other attributes.</li>
+                    <li><strong>Semantic Object Attributes:</strong> An attribute that *is* another semantic object (this is the key difference from E-R).</li>
+                </ul>
+                <h4 class="text-lg font-semibold text-white mt-4 mb-2">Attribute Cardinality</h4>
+                <p>Specified in <span class="def-term">n.m</span> format, where 'n' is the minimum (0 or 1) and 'm' is the maximum (1 or N). E.g., <span class="def-term">1.1</span> (mandatory one), <span class="def-term">0.N</span> (optional many).</p>
+            </div>
+            
+            <h3 class="sub-section animate-on-scroll">4.3 Attribute Domains</h3>
+            <div class="bg-gray-800 p-6 rounded-xl shadow-lg animate-on-scroll">
+                <p>A collection of all possible values for an attribute. A domain has two descriptions:</p>
+                <ul class="list-disc list-inside space-y-1 mt-2">
+                    <li><strong>Physical Description:</strong> The data type (e.g., "string", "Roll No should not exceed 99").</li>
+                    <li><strong>Semantic Description:</strong> The function or purpose of the attribute (e.g., "Name of a student must be a valid name").</li>
+                </ul>
+            </div>
+
+            <h3 class="sub-section animate-on-scroll">4.4 Semantic Object Views</h3>
+            <div class="bg-gray-800 p-6 rounded-xl shadow-lg animate-on-scroll">
+                <p>A part of an object that is displayed in a particular application. One object can be displayed in many different views (e.g., one view for students, one for professors, both from the same COLLEGE object).</p>
+            </div>
+
+            <h3 class="sub-section animate-on-scroll">4.5 Types of Objects</h3>
+            <ul class="def-list animate-on-scroll">
+                <li><strong>Simple Object:</strong> Contains only single-valued, non-object attributes.</li>
+                <li><strong>Composite Object:</strong> Contains one or more multi-valued, non-object attributes.</li>
+                <li><strong>Compound Object:</strong> Contains at least one <span class="def-term">object attribute</span>.</li>
+                <li><strong>Hybrid Object:</strong> A combination of composite and compound.</li>
+                <li><strong>Association Object:</strong> An object that links two or more other objects, typically storing data about that relationship.</li>
+                <li><strong>Parent/Subtype Objects:</strong> A subtype object inherits the attributes of its parent (similar to E-R super/subtypes).</li>
+                <li><strong>Archetype/Version Objects:</strong> An archetype object produces other objects that are "versions" of it (e.g., BOOK is the archetype, EDITION is the version).</li>
+            </ul>
+        </section>
+        
+        <!-- Chapter 5: Relational Model & Normalization -->
+        <section id="ch5" class="chapter-section pt-20">
+            <h2 class="text-3xl font-bold text-white mb-8 pb-4 border-b-4 border-cyan-500 animate-on-scroll">Chapter 5: Relational Model & Normalization</h2>
+            
+            <h3 class="sub-section animate-on-scroll">5.1 Relational Model</h3>
+            <div class="bg-gray-800 p-6 rounded-xl shadow-lg animate-on-scroll">
+                <p>The standard data model (by E.F. Codd, 1970) where data is stored in tables.</p>
+                <h4 class="text-lg font-semibold text-white mt-4 mb-2">Terminology:</h4>
+                <ul class="list-disc list-inside space-y-2 pl-2">
+                    <li><span class="def-term">Relation:</span> A table.</li>
+                    <li><span class="def-term">Tuple:</span> A row (a single record).</li>
+                    <li><span class="def-term">Attribute:</span> A column (a field).</li>
+                    <li><span class="def-term">Domain:</span> The set of all possible values for an attribute.</li>
+                    <li><span class="def-term">Degree:</span> The number of attributes (columns).</li>
+                    <li><span class="def-term">Cardinality:</span> The number of tuples (rows).</li>
+                </ul>
+            </div>
+
+            <h3 class="sub-section animate-on-scroll">5.2 Keys</h3>
+            <div class="tidbit animate-on-scroll">
+                <p>Keys are attributes used to identify tuples (rows) in a relation.</p>
+                <ul class="def-list mt-3">
+                    <li><strong>Super Key:</strong> Any attribute or set of attributes that <span class="def-term">uniquely identifies</span> a tuple.</li>
+                    <li><strong>Candidate Key:</strong> A <span class="def-term">minimal</span> super key (no attribute can be removed and it still be unique).</li>
+                    <li><strong>Primary Key (PK):</strong> The <span class="def-term">one</span> candidate key chosen by the designer to be the main identifier. It cannot contain null values.</li>
+                    <li><strong>Alternate Key:</strong> A candidate key that was *not* chosen to be the primary key.</li>
+                    <li><strong>Composite Key:</strong> A primary key that consists of <span class="def-term">two or more</span> attributes.</li>
+                    <li><strong>Foreign Key (FK):</strong> An attribute in one relation whose values match the primary key in another relation, used to link the tables.</li>
+                </ul>
+            </div>
+            
+            <h3 class="sub-section animate-on-scroll">5.3 RDBMS Components</h3>
+            <div class="bg-gray-800 p-6 rounded-xl shadow-lg animate-on-scroll">
+                <p>A Relational Database Management System (RDBMS) is the software that manages relational databases. Its components include a File Manager, Database Manager, Query Processor, and Data Dictionary.</p>
+            </div>
+
+            <h3 class="sub-section animate-on-scroll">5.4 Types of Relations</h3>
+            <ul class="def-list animate-on-scroll">
+                <li><strong>Base Tables:</strong> A table that physically exists in the database.</li>
+                <li><strong>Query Results:</strong> The (virtual) table of results from a query.</li>
+                <li><strong>Views:</strong> A virtual table based on a query, but stored in the database as an object. Views provide security and query simplicity.</li>
+            </ul>
+
+            <h3 class="sub-section animate-on-scroll">5.6 Codd's Rules</h3>
+            <div class="bg-gray-800 p-6 rounded-xl shadow-lg animate-on-scroll">
+                <p>A set of 12 rules (0-12) proposed by E.F. Codd to define what makes a DBMS truly "relational." Key rules include the Information Rule (all data in tables), Guaranteed Access (all data accessible by table/PK/attribute), and Systematic Treatment of Nulls.</p>
+            </div>
+
+            <h3 class="sub-section animate-on-scroll">5.7 Relational Data Integrity</h3>
+            <ul class="def-list animate-on-scroll">
+                <li><strong>Entity Integrity:</strong> Ensures the primary key can <span class="def-term">never</span> be null.</li>
+                <li><strong>Domain Integrity:</strong> Enforces that all values in a column are from its defined domain (e.g., "Grades" must be A, B, C, D, or F).</li>
+                <li><strong>Referential Integrity:</strong> Ensures that a foreign key value must either be null or must match a valid, existing primary key value in the parent table. This prevents "orphan" records.</li>
+            </ul>
+
+            <h3 class="sub-section animate-on-scroll">5.8 Database Languages</h3>
+            <ul class="def-list animate-on-scroll">
+                <li><strong>Data Definition Language (DDL):</strong> Used to <span class="def-term">define</span> the database schema (e.g., CREATE TABLE, ALTER TABLE).</li>
+                <li><strong>Data Manipulation Language (DML):</strong> Used to <span class="def-term">manipulate</span> data within the schema (e.g., INSERT, UPDATE, DELETE, SELECT).</li>
+            </ul>
+            
+            <h3 class="sub-section animate-on-scroll">5.9 Relational Algebra</h3>
+            <div class="bg-gray-800 p-6 rounded-xl shadow-lg animate-on-scroll">
+                <p>A procedural query language that defines operations on relations (tables) to produce new relations.</p>
+                <h4 class="text-lg font-semibold text-white mt-4 mb-2">Unary Operations (one relation):</h4>
+                <ul class="list-disc list-inside space-y-1 pl-2">
+                    <li><strong>Selection (σ):</strong> Selects <span class="def-term">rows</span> (tuples) that satisfy a condition. (Filters horizontally)</li>
+                    <li><strong>Projection (π):</strong> Selects <span class="def-term">columns</span> (attributes). (Filters vertically)</li>
+                </ul>
+                <h4 class="text-lg font-semibold text-white mt-4 mb-2">Binary Operations (two relations):</h4>
+                 <ul class="list-disc list-inside space-y-1 pl-2">
+                    <li><strong>Union (∪):</strong> Combines all rows from two compatible tables.</li>
+                    <li><strong>Difference (-):</strong> Returns rows that are in the first table but not the second.</li>
+                    <li><strong>Intersection (∩):</strong> Returns rows that appear in both tables.</li>
+                    <li><strong>Product (x):</strong> Creates a new table of all possible combinations of rows from two tables.</li>
+                    <li><strong>Division (÷):</strong> Finds rows in one table that match all rows in another.</li>
+                </ul>
+            </div>
+            
+            <h3 class="sub-section animate-on-scroll">5.10 Joins</h3>
+            <div class="bg-gray-800 p-6 rounded-xl shadow-lg animate-on-scroll">
+                <p>A join operation combines data from two or more tables into a single result table based on matching criteria (the join condition).</p>
+                <div class="diagram-placeholder my-4">
+                    
+                </div>
+                <ul class="def-list mt-4">
+                    <li><strong>Theta Join:</strong> A join that links tables based on any comparison operator (theta), such as =, <, >, or !=. It is a general-purpose join.</li>
+                    <li><strong>Equi Join:</strong> A type of Theta Join that <span class="def-term">only</span> uses the equality operator (=) as its join condition. This is the most common type of join. The common attributes will appear twice in the result table.</li>
+                    <li><strong>Natural Join:</strong> A special type of Equi Join that joins tables on *all* attributes that have the same name. The duplicate columns are removed from the final result.</li>
+                    <li><strong>Outer Join:</strong> A join that retrieves all rows that match the join condition, *plus* all rows from one or both tables that do not have a match.
+                        <ul class="list-disc list-inside space-y-1 mt-2 pl-4">
+                            <li><strong>Left Outer Join:</strong> Includes all rows from the *left* table and matching rows from the right table (or NULLs if no match).</li>
+                            <li><strong>Right Outer Join:</strong> Includes all rows from the *right* table and matching rows from the left table (or NULLs if no match).</li>
+                            <li><strong>Full Outer Join:</strong> Includes all rows from *both* tables, filling with NULLs where matches are not found.</li>
+                        </ul>
+                    </li>
+                    <li><strong>Semi Join:</strong> A join that returns only the rows from the first table for which a match is found in the second table. It does not include any columns from the second table.</li>
+                </ul>
+            </div>
+
+            <h3 class="sub-section animate-on-scroll">5.13 Database Anomalies</h3>
+            <div class="tidbit animate-on-scroll">
+                <p>Problems that occur in poorly designed (un-normalized) tables:</p>
+                <ul class="def-list mt-3">
+                    <li><strong>Insertion Anomaly:</strong> Inability to add data because other, unrelated data is missing.</li>
+                    <li><strong>Deletion Anomaly:</strong> Deleting one piece of data unintentionally deletes another, unrelated piece of data.</li>
+                    <li><strong>Modification Anomaly:</strong> A simple change (like an address) must be updated in many different rows, leading to inconsistency.</li>
+                </ul>
+            </div>
+            
+            <h3 class="sub-section animate-on-scroll">5.14 - 5.25 Normalization</h3>
+            <div class="bg-gray-800 p-6 rounded-xl shadow-lg animate-on-scroll">
+                <p>The process of producing a simpler, more reliable database structure by breaking down complex tables to reduce redundancy and eliminate anomalies. This relies on the concept of <span class="def-term">Functional Dependency</span> (if A determines B, then B is functionally dependent on A).</p>
+                <div class="diagram-placeholder my-4">
+                    
+                </div>
+                <ul class="def-list mt-4">
+                    <li><strong>First Normal Form (1NF):</strong> All attributes must be <span class="def-term">atomic</span> (no repeating groups or multi-valued attributes).</li>
+                    <li><strong>Second Normal Form (2NF):</strong> Must be in 1NF, AND all non-key attributes must depend on the <span class="def-term">entire</span> primary key (no partial dependencies).</li>
+                    <li><strong>Third Normal Form (3NF):</strong> Must be in 2NF, AND no non-key attribute can depend on another non-key attribute (no <span class="def-term">transitive dependencies</span>).</li>
+                    <li><strong>Boyce-Codd (BCNF):</strong> A stricter 3NF. Every determinant must be a candidate key.</li>
+                    <li><strong>Fourth Normal Form (4NF):</strong> Must be in BCNF, AND have no <span class="def-term">multi-valued dependencies</span>.</li>
+                    <li><strong>Fifth (5NF) & Domain Key (DK/NF):</strong> Higher forms that deal with join dependencies and all constraints. 3NF is typically sufficient for most business applications.</li>
+                </ul>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="text-center py-12 mt-16 border-t border-gray-800">
+        <p class="text-gray-500">End of DBMS Chapters 1-5 Detailed Guide</p>
+    </footer>
+
+    <!-- JavaScript for Animations and Active Nav -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            // --- Intersection Observer for Scroll Animations ---
+            const scrollElements = document.querySelectorAll('.animate-on-scroll');
+            
+            const elementObserver = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-visible');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, {
+                threshold: 0.05 // Trigger when 5% of the element is visible
+            });
+
+            scrollElements.forEach(el => {
+                elementObserver.observe(el);
+            });
+
+            // --- Intersection Observer for Active Nav Link ---
+            const chapterSections = document.querySelectorAll('.chapter-section');
+            const navLinks = document.querySelectorAll('.nav-link');
+
+            const navObserver = new IntersectionObserver((entries) => {
+                let currentActive = null;
+                
+                entries.forEach(entry => {
+                    if (entry.isIntersecting && entry.intersectionRatio > 0) {
+                        // Find the one most visible
+                        if (!currentActive || entry.intersectionRatio > currentActive.intersectionRatio) {
+                            currentActive = entry;
+                        }
+                    }
+                });
+
+                if (currentActive) {
+                    const id = currentActive.target.getAttribute('id');
+                    navLinks.forEach(link => {
+                        link.classList.remove('active');
+                        if (link.getAttribute('href') === `#${id}`) {
+                            link.classList.add('active');
+                        }
+                    });
+                }
+                
+            }, {
+                rootMargin: '-20% 0px -50% 0px', // A "trigger zone" in the upper-middle of the screen
+                threshold: [0.1, 0.5, 0.9] // Check at multiple visibility points
+            });
+
+            chapterSections.forEach(section => {
+                navObserver.observe(section);
+            });
+
+        });
+    </script>
+</body>
+</html>
