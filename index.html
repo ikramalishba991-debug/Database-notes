@@ -942,20 +942,7 @@
                     <p class="project-scenario">A table with <code>StudentID</code>, <code>StudentName</code>, <code>CourseID</code>, <code>CourseLength</code>, and a repeating group for <code>UnitCode</code>, <code>UnitName</code>, <code>Lecturer</code>.</p>
                     <p class="mt-4"><strong>Process:</strong></p>
                     <ul class="list-decimal list-inside space-y-2 pl-2">
-                        <li><strong>1Sizing-fits-viewport"
->
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sizing-fits-viewport</title>
-<style>
-  html, body {
-    margin: 0;
-    padding: 0;
-  }
-</style>
-<body style="width: 100vw; height: 100vh;">
-  <div style="background-color: rgb(255, 0, 0); width: 50vw; height: 50vh;"></div>
-</body>
-</html>NF:</strong> Remove repeating groups by creating two tables: <code>Student(StudentID, StudentName, CourseID, CourseLength)</code> and <code>Unit(StudentID, UnitCode, UnitName, Lecturer)</code>.</li>
+                        <li><strong>1NF:</strong> Remove repeating groups by creating two tables: <code>Student(StudentID, StudentName, CourseID, CourseLength)</code> and <code>Unit(StudentID, UnitCode, UnitName, Lecturer)</code>.</li>
                         <li><strong>2NF:</strong> The new <code>Unit</code> table has partial dependencies. <code>UnitName</code> and <code>Lecturer</code> depend only on <code>UnitCode</code>. This is broken into:
                             <ul class="list-disc list-inside space-y-1 mt-2 pl-4 text-gray-400">
                                 <li><code>UnitTable(UnitCode, UnitName, Lecturer)</code></li>
