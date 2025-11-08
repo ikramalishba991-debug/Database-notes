@@ -389,8 +389,8 @@
                 </div>
                 <ul class="def-list mt-4">
                     <li><strong>1. External Level / View:</strong> What a particular user or application sees. It's a "subschema" showing only the part of the database relevant to that user. There can be many external views.</li>
-                    <li><strong>2. Logical or Conceptual Level / View:</strong> The "community view." A complete logical description of the *entire* database (all entities, attributes, relationships). It hides physical storage details. There is only one conceptual schema.</li>
-                    <li><strong>3. Internal or Physical Level:</strong> Describes *how* the data is physically stored on the storage media (data structures, file organization, indexes). There is only one internal schema.</li>
+                    <li><strong>2. Logical or Conceptual Level / View:</strong> The "community view." A complete logical description of the entire database (all entities, attributes, relationships). It hides physical storage details. There is only one conceptual schema.</li>
+                    <li><strong>3. Internal or Physical Level:</strong> Describes how the data is physically stored on the storage media (data structures, file organization, indexes). There is only one internal schema.</li>
                 </ul>
             </div>
 
@@ -480,7 +480,7 @@
                 <ul class="list-decimal list-inside space-y-2 mt-3">
                     <li><strong>2.8.1 Preliminary Investigation:</strong> Identify problems and assess feasibility (technical, economic).</li>
                     <li><strong>2.8.2 Requirement Analysis:</strong> Study the current business system in detail to find out how it works.</li>
-                    <li><strong>2.8.3 System Design:</strong> Define *how* the new system will meet the requirements (forms, reports, database design).</li>
+                    <li><strong>2.8.3 System Design:</strong> Define <span class="def-term">how</span> the new system will meet the requirements (forms, reports, database design).</li>
                     <li><strong>2.8.4 Software Development:</strong> The actual coding of the programs.</li>
                     <li><strong>2.8.5 System Testing:</strong> Integrating and testing all modules.</li>
                     <li><strong>2.8.6 System Implementation:</strong> Installing the system and training users.</li>
@@ -864,12 +864,12 @@
                 <ul class="def-list mt-4">
                     <li><strong>5.10.1 Theta Join:</strong> A join that links tables based on any comparison operator (theta), such as =, <, >, or !=. It is a general-purpose join.</li>
                     <li><strong>5.10.2 Equi Join:</strong> A type of Theta Join that <span class="def-term">only</span> uses the equality operator (=) as its join condition. This is the most common type of join. The common attributes will appear twice in the result table.</li>
-                    <li><strong>5.10.3 Natural Join:</strong> A special type of Equi Join that joins tables on *all* attributes that have the same name. The duplicate columns are removed from the final result.</li>
+                    <li><strong>5.10.3 Natural Join:</strong> A special type of Equi Join that joins tables on <span class="def-term">all</span> attributes that have the same name. The duplicate columns are removed from the final result.</li>
                     <li><strong>5.10.4 Outer Join:</strong> A join that retrieves all rows that match the join condition, *plus* all rows from one or both tables that do not have a match.
                         <ul class="list-disc list-inside space-y-1 mt-2 pl-4 text-gray-400">
-                            <li><strong>Left Outer Join:</strong> Includes all rows from the *left* table and matching rows from the right table (or NULLs if no match).</li>
-                            <li><strong>Right Outer Join:</strong> Includes all rows from the *right* table and matching rows from the left table (or NULLs if no match).</li>
-                            <li><strong>Full Outer Join:</strong> Includes all rows from *both* tables, filling with NULLs where matches are not found.</li>
+                            <li><strong>Left Outer Join:</strong> Includes all rows from the <span class="def-term">left</span>span> table and matching rows from the right table (or NULLs if no match).</li>
+                            <li><strong>Right Outer Join:</strong> Includes all rows from the <span class="def-term">right</span> table and matching rows from the left table (or NULLs if no match).</li>
+                            <li><strong>Full Outer Join:</strong> Includes all rows from <span class="def-term">both</span> tables, filling with NULLs where matches are not found.</li>
                         </ul>
                     </li>
                     <li><strong>5.10.5 Semi Join:</strong> A join that returns only the rows from the first table for which a match is found in the second table. It does not include any columns from the second table.</li>
@@ -903,7 +903,7 @@
                 <li><strong>5.16 First Normal Form (1NF):</strong> A relation is in 1NF if it does not contain a repeating group. All attributes must be <span class="def-term">atomic</span> (each cell has only one value).</li>
                 <li><strong>5.17 Full Functional Dependency:</strong> An attribute B is fully functionally dependent on A if it is dependent on A, but not on any proper subset of A.</li>
                 <li><strong>5.18 Second Normal Form (2NF):</strong> Must be in 1NF, AND all non-key attributes must be fully functionally dependent on the <span class="def-term">entire</span> primary key (no partial dependencies). (This is only an issue for tables with composite primary keys).</li>
-                <li><strong>5.19 Transitive Dependency:</strong> A condition where an attribute A determines B, and B determines C, but B is *not* part of the primary key. This means a non-key attribute (C) is dependent on another non-key attribute (B).</li>
+                <li><strong>5.19 Transitive Dependency:</strong> A condition where an attribute A determines B, and B determines C, but B is <span class="def-term">not</span> part of the primary key. This means a non-key attribute (C) is dependent on another non-key attribute (B).</li>
                 <li><strong>5.20 Third Normal Form (3NF):</strong> Must be in 2NF, AND no non-key attribute is transitively dependent on the primary key (no <span class="def-term">transitive dependencies</span>).</li>
                 <li><strong>5.21 Boyce-Codd (BCNF):</strong> A stricter 3NF. A relation is in BCNF if and only if every <span class="def-term">determinant</span> is a candidate key.</li>
                 <li><strong>5.22 Fourth Normal Form (4NF):</strong> Must be in BCNF, AND have no <span class="def-term">multi-valued dependencies</span> (where one attribute determines a set of multiple values for another attribute).</li>
@@ -1029,3 +1029,4 @@
     </script>
 </body>
 </html>
+
